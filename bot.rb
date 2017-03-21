@@ -22,8 +22,16 @@ class DryDockBot
 
     new_nearby_urls = nearby_tweet_urls - @tweet_urls_so_far
     @tweet_urls_so_far.concat new_nearby_urls
-    #new_nearby_urls.each{ | nearby | @notifier.ping("nearby: #{nearby_tweet}") }
-    new_nearby_urls.each{ | nearby | puts("nearby: #{nearby}") }
+
+    publish(new_nearby_urls)
+  end
+
+  def publish(new_nearby_urls)
+    if ENV['QUIET_MODE']
+      new_nearby_urls.each{ | nearby | puts("nearby: #{nearby}") }
+    else
+      new_nearby_urls.each{ | nearby | @notifier.ping("nearby: #{nearby}") }
+    end
   end
 end
 
